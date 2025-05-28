@@ -9,7 +9,7 @@ Our code is based on PAIE [here](https://github.com/mayubo2333/PAIE) and thanks 
 
 
 <div align=center>
-<img width="800" height="350" src="./figure/model.png"/>
+<img width="800" height="350" src="./model_framework.png"/>
 </div>
 
 ## 🚀 How to use our code?
@@ -24,7 +24,7 @@ Before starting, ensure you have the required dependencies and environment set u
 
 ### 1.1 Create Conda Environment
 
-First, create a new Conda environment with Python 3.7:
+First, create a new Conda environment with Python 3.7
 
 ### 1.2 Install Dependencies
 
