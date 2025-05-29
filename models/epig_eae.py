@@ -16,8 +16,8 @@ bert_model = BertModel.from_pretrained(BERT_PATH)
 
 
 def l2_normalize(tensor):
-    norm = torch.norm(tensor, p=2, dim=-1, keepdim=True)  # 计算每个向量的 L2 范数
-    normalized_tensor = tensor / (norm + 1e-8)  # 避免除零错误
+    norm = torch.norm(tensor, p=2, dim=-1, keepdim=True)
+    normalized_tensor = tensor / (norm + 1e-8)
     return normalized_tensor
 
 class EPIG_EAE(BartPretrainedModel):
