@@ -50,10 +50,10 @@ def get_args_parser():
     parser.add_argument('--seed', default=42, type=int)
     parser.add_argument("--device", default='cuda', type=str)
 
-    parser.add_argument("--gat_layers", default=1,type=int)#2~3
-    parser.add_argument("--num_heads", default=4,type=int)#2~4
+    parser.add_argument("--gat_layers", default=1,type=int)#1~3
+    parser.add_argument("--num_heads", default=4,type=int)#2~8
     parser.add_argument("--alpha", default=0.2,type=float)
-    parser.add_argument("--iterEpoch_num", default=1,type=int)#1~5
+    parser.add_argument("--iterEpoch_num", default=1,type=int)#1~n
 
 
     # setting only for the situation when inference_only
