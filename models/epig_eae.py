@@ -36,7 +36,7 @@ class EPIG_EAE(BartPretrainedModel):
         self.model._init_weights(self.edge_update_matrix)
         self.model._init_weights(self.shared_role_matrix)
         self.role_embeddings = {}
-        with open('./data/dset_meta/role_num_rams.json', 'r') as f:
+        with open('./data/dset_meta/role_num_rams.json', 'r') as f:# need change to rams/wikievent/OEE_CFC
             self.role_dict = json.load(f)
         for event_type, roles in self.role_dict.items():
             self.role_embeddings[event_type] = {}
@@ -140,21 +140,21 @@ class EPIG_EAE(BartPretrainedModel):
                 x = torch.stack([trigger_emb] + args_emb + [etype_emb] + attrs_emb)
                 edge_index = []
                 edge_attr = []
-                for k, role in enumerate(args):
+                for k, role in enumerate(args):#tri-args
                     edge_index.append([0, k + 1])
                     edge_index.append([k + 1, 0])
                     edge_attr.append(attrs_emb[k])
                     edge_attr.append(attrs_emb[k])
-                for k, attr in enumerate(attrs):
+                for k, attr in enumerate(attrs):#etype-roles
                     edge_index.append([len(args) + 1, len(args) + 2 + k])
                     edge_index.append([len(args) + 2 + k, len(args) + 1])
                     edge_attr.append(self.get_bert_embedding('属性'))
                     edge_attr.append(self.get_bert_embedding('属性'))
-                edge_index.append([0, len(args) + 1])
+                edge_index.append([0, len(args) + 1])#tri-etype
                 edge_index.append([len(args) + 1, 0])
                 edge_attr.append(self.get_bert_embedding('实例'))
                 edge_attr.append(self.get_bert_embedding('实例'))
-                for k, arg in enumerate(args):
+                for k, arg in enumerate(args):#args-roles
                     edge_index.append([k + 1, len(args) + 2 + k])
                     edge_index.append([len(args) + 2 + k, k + 1])
                     edge_attr.append(self.get_bert_embedding('值'))
@@ -210,13 +210,15 @@ class EPIG_EAE(BartPretrainedModel):
                         prompt_query_sub_origin_normalized = l2_normalize(prompt_query_sub_origin)
                         prompt_query_sub_attr_normalized = l2_normalize(prompt_query_sub_attr)
                         if self.role_embeddings[etype][arg_role] is None:
-                            self.role_embeddings[etype][arg_role] = (prompt_query_sub_origin_normalized + prompt_query_sub_attr_normalized) / 2
+                            if self.training:
+                                self.role_embeddings[etype][arg_role] = (prompt_query_sub_origin_normalized + prompt_query_sub_attr_normalized) / 2
                             prompt_query_sub = (prompt_query_sub_origin_normalized + prompt_query_sub_attr_normalized) / 2
                         else:
                             role_embedding_normalized = l2_normalize(self.role_embeddings[etype][arg_role].detach())
                             prompt_query_sub = (prompt_query_sub_origin_normalized + prompt_query_sub_attr_normalized + role_embedding_normalized) / 3
                             new_value = torch.matmul(prompt_query_sub.detach(), self.shared_role_matrix)
-                            self.role_embeddings[etype][arg_role] = new_value
+                            if self.training:
+                                self.role_embeddings[etype][arg_role] = new_value
                         start_query = (prompt_query_sub * self.w_prompt_start).unsqueeze(-1)  # [1, H, 1]
                         end_query = (prompt_query_sub * self.w_prompt_end).unsqueeze(-1)  # [1, H, 1]
                         start_logits = torch.bmm(context_output.unsqueeze(0), start_query).squeeze()
