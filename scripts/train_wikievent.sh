@@ -1,6 +1,6 @@
 if [ $# == 0 ] 
 then
-    SEED=42
+    SEED=43
     LR=2e-5
 else
     SEED=$1
