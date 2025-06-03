@@ -37,7 +37,7 @@ def build_model(args, model_type):
 
     config.bipartite = args.bipartite
     config.matching_method_train = args.matching_method_train
-
+    config.dataset_type=args.dataset_type
     config.gat_layers=args.gat_layers
     config.alpha=args.alpha
     config.num_heads=args.num_heads
