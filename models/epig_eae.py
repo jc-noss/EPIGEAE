@@ -35,8 +35,14 @@ class EPIG_EAE(BartPretrainedModel):
         self.shared_role_matrix = nn.Parameter(torch.rand(config.d_model, config.d_model))
         self.model._init_weights(self.edge_update_matrix)
         self.model._init_weights(self.shared_role_matrix)
+        if self.config.dataset_type == 'rams':
+            role_path='./data/dset_meta/role_num_rams.json'
+        elif self.config.dataset_type == 'wikievent':
+            role_path='./data/dset_meta/role_num_wikievent.json'
+        elif self.config.dataset_type == 'oeecfc':
+            role_path='./data/dset_meta/dict_role_OEE_CFC.json'
         self.role_embeddings = {}
-        with open('./data/dset_meta/role_num_rams.json', 'r') as f:# need change to rams/wikievent/OEE_CFC
+        with open(role_path, 'r') as f:
             self.role_dict = json.load(f)
         for event_type, roles in self.role_dict.items():
             self.role_embeddings[event_type] = {}
