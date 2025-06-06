@@ -1,7 +1,7 @@
 if [ $# == 0 ] 
 then
-    SEED=42
-    LR=2e-5
+    SEED=21
+    LR=5e-5
 else
     SEED=$1
     LR=$2
@@ -20,7 +20,7 @@ python engine.py \
     --output_dir=$work_path  \
     --learning_rate=$LR \
     --batch_size 1 \
-    --max_steps=30000 \
+    --max_steps=10000 \
     --max_enc_seq_length 600 \
     --max_prompt_seq_length 300 \
     --bipartite
