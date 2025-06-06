@@ -19,7 +19,8 @@ python engine.py \
     --seed=$SEED \
     --output_dir=$work_path  \
     --learning_rate=$LR \
-    --batch_size 1 \
+    --batch_size 4 \
+    --infer_batch_size 32 \
     --max_steps=10000 \
     --max_enc_seq_length 600 \
     --max_prompt_seq_length 300 \
